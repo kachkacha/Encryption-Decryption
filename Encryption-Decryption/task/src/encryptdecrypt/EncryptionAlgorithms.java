@@ -2,14 +2,29 @@ package encryptdecrypt;
 
 public abstract class EncryptionAlgorithms {
 
-    public static EncryptionAlgorithms getAlgorithm(String algorithm) {
+    public enum MODE {enc, dec}
+
+    public enum ALGORITHM {shift, unicode}
+
+    public static EncryptionAlgorithms getAlgorithm(ALGORITHM algorithm) {
         switch (algorithm) {
-            case "shift":
+            case shift:
                 return new ShiftAlgorithm();
-            case "unicode":
+            case unicode:
                 return new UnicodeAlgorithm();
             default:
-                return null;
+                throw new IllegalArgumentException("no such algorithm: " + algorithm.name());
+        }
+    }
+
+    public String encryptDecrypt(String data, long key, MODE mode) {
+        switch (mode) {
+            case enc:
+                return encrypt(data, key);
+            case dec:
+                return decrypt(data, key);
+            default:
+                throw new IllegalArgumentException("no such mode: " + mode.name());
         }
     }
 
